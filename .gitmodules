@@ -4,3 +4,6 @@
 [submodule "Discord-Objects-Core"]
 	path = Discord-Objects-Core
 	url = https://github.com/QuiCM/Discord-Objects-Core
+[submodule "WebSocketting"]
+	path = WebSocketting
+	url = https://github.com/QuiCM/WebSocketting
