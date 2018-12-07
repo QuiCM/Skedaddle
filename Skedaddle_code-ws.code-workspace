@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "Discord-Core\\Websocketting"
+		},
+		{
+			"path": "Discord-Core"
+		},
+		{
+			"path": "Discord-Core\\Discord-Objects-Core"
+		},
+		{
+			"path": "Skedaddle"
+		}
+	],
+	"settings": {}
+}
