@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Gateway;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +16,11 @@ namespace Skedaddle
 
             if (string.IsNullOrWhiteSpace(cfg.AuthToken))
             {
-                throw new InvalidOperationException("A valid auth token must be configured");
+                Console.WriteLine("No auth token found - preparing first run configuration");
+                Process p = Process.Start(new ProcessStartInfo("config.json") { UseShellExecute = true });
+                p.WaitForExit();
+
+                cfg = Configuration.Read("config.json");
             }
 
             Gateway gateway = Discord.Discord.CreateGateway(
@@ -23,13 +28,26 @@ namespace Skedaddle
                 cfg
             );
 
-            Discord.Json.Objects.GetGatewayResponseObject getGateway = await gateway.AuthenticateAsync(cts.Token);
-            Console.WriteLine($"Gateway URL: {getGateway.url}");
-            Task blockable = await gateway.ConnectAsync(cts.Token, getGateway);
 
-            await blockable;
+            while (true)
+            {
+                Discord.Json.Objects.GetGatewayResponseObject getGateway = await gateway.AuthenticateAsync(cts.Token);
+                Console.WriteLine($"Gateway URL: {getGateway.url} - Sessions remaining: "
+                    + $"{(getGateway as Discord.Json.Objects.GetGatewayBotResponseObject).session_start_limit.remaining}");
 
-            Console.ReadKey();
+
+                Task blockable = await Connect(gateway, cts.Token, getGateway);
+
+                await blockable;
+
+                Console.WriteLine(blockable.Status);
+                Console.WriteLine(blockable.Exception);
+            }
+        }
+
+        static async Task<Task> Connect(Gateway gateway, CancellationToken token, Discord.Json.Objects.GetGatewayResponseObject response)
+        {
+            return await gateway.ConnectAsync(token, response);
         }
     }
 }
