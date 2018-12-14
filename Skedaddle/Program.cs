@@ -23,20 +23,29 @@ namespace Skedaddle
                 cfg = Configuration.Read("config.json");
             }
 
+            if (string.IsNullOrWhiteSpace(cfg.AuthToken))
+            {
+                Trace.WriteLine("No auth token configured - exiting.");
+                return;
+            }
+
             Gateway gateway = Discord.Discord.CreateGateway(
                 new Discord.Credentials.Credentials(cfg.AuthToken),
                 cfg
             );
 
+            Discord.Json.Objects.GetGatewayResponseObject getGateway = await gateway.AuthenticateAsync(cts.Token);
+            Console.WriteLine($"Gateway URL: {getGateway.url} - Sessions remaining: "
+                + $"{(getGateway as Discord.Json.Objects.GetGatewayBotResponseObject).session_start_limit.remaining}");
+
+
+            Task blockable = await Connect(gateway, cts.Token, getGateway);
+
+            await blockable;
 
             while (true)
             {
-                Discord.Json.Objects.GetGatewayResponseObject getGateway = await gateway.AuthenticateAsync(cts.Token);
-                Console.WriteLine($"Gateway URL: {getGateway.url} - Sessions remaining: "
-                    + $"{(getGateway as Discord.Json.Objects.GetGatewayBotResponseObject).session_start_limit.remaining}");
-
-
-                Task blockable = await Connect(gateway, cts.Token, getGateway);
+                blockable = await gateway.ReconnectAsync();
 
                 await blockable;
 
