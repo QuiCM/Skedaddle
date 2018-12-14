@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skedaddle", "Skedaddle\Skedaddle.csproj", "{5E290D60-3E44-427E-BF76-8EF1E135D8AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skedaddle", "Skedaddle\Skedaddle.csproj", "{5E290D60-3E44-427E-BF76-8EF1E135D8AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSocketting", "Discord-Core\Websocketting\WebSocketting.csproj", "{9E0EABE4-B800-4DC0-86E6-CACB9A4167EF}"
 EndProject
