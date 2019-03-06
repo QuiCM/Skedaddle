@@ -1,3 +1,6 @@
 [submodule "Discord-Core"]
 	path = Discord-Core
 	url = https://github.com/QuiCM/Discord-Core
+[submodule "MapCord"]
+	path = MapCord
+	url = https://github.com/QuiCM/MapCord.git
